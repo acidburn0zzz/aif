@@ -69,7 +69,8 @@ LVM_VG=""               			# Name of volume group to create or use
 LVM_VG_MB=0             			# MB remaining of VG
 LVM_LV_NAME=""          			# Name of LV to create or use
 LV_SIZE_INVALID=0       			# Is LVM LV size entered valid?
-VG_SIZE_TYPE=""         			# Is VG in Gigabytes or Megabytes?
+
+_TYPE=""         			# Is VG in Gigabytes or Megabytes?
 
 # LUKS
 LUKS=0                  			# Luks Detected?
@@ -1430,7 +1431,7 @@ check_lv_size() {
        check_for_error
        
 		# Once created, get size and size type for display and later number-crunching for lv creation
-		VG_SIZE=$(vgdisplay $LVM_VG | grep 'VG Size' | awk '{print $3}' | sed 's/\..*//')
+		VG_SIZE=$(vgdisplay "$LVM_VG" | grep 'VG Size' | awk '{print $3}' | sed 's/\..*//' | sed 's/[^0-9]*//g')
 		VG_SIZE_TYPE=$(vgdisplay $LVM_VG | grep 'VG Size' | awk '{print $4}')
 
 		# Convert the VG size into GB and MB. These variables are used to keep tabs on space available and remaining
